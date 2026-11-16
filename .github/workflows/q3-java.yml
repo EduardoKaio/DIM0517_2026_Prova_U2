@@ -1,8 +1,12 @@
 name: Java
-
+on:
+  pull_request:
+    types: [closed]
+    branches: [develop]
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -21,3 +25,9 @@ jobs:
       - name: Build
         run: mvn -B compile
 
+      - name: Criar tag build
+        if: success()
+        run: |
+          TAG="build-${{ github.run_id }}"
+          git tag "$TAG"
+          git push origin "$TAG"

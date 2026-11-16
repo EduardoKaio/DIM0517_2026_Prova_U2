@@ -1,8 +1,12 @@
 name: Java
 
+on:
+  pull_request:
+    types: [closed]
+    branches: [develop]
 jobs:
   build:
-
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -19,3 +23,5 @@ jobs:
       - name: Build
         run: mvn -B compile
 
+      - name: Testes unitários
+        run: mvn -B test
